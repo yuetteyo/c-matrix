@@ -1,0 +1,129 @@
+#suite s21_determinant
+
+#test s21_determinant_matrix_simple_1
+  int rows = 1;
+  int columns = 1;
+  matrix_t A = {0};
+  s21_create_matrix(rows, columns, &A);
+  A.matrix[0][0] = 5;
+  double det = 5;
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(0, ret);
+  ck_assert_double_eq(res, det);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_simple_2
+  int rows = 2;
+  int columns = 2;
+  matrix_t A = {0};
+  s21_create_matrix(rows, columns, &A);
+  A.matrix[0][0] = 5;
+  A.matrix[0][1] = 1;
+  A.matrix[1][0] = 4;
+  A.matrix[1][1] = 7;
+  double det = 31;
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(0, ret);
+  ck_assert_double_eq(res, det);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_simple_3
+  int rows = 3;
+  int columns = 3;
+  matrix_t A = {0};
+  s21_create_matrix(rows, columns, &A);
+  A.matrix[0][0] = 5;
+  A.matrix[0][1] = 1;
+  A.matrix[0][2] = 1;
+  A.matrix[1][0] = 4;
+  A.matrix[1][1] = 7;
+  A.matrix[1][2] = 5;
+  A.matrix[2][0] = 3;
+  A.matrix[2][1] = 3;
+  A.matrix[2][2] = 4;
+  double det = 55;
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(0, ret);
+  ck_assert_double_eq(res, det);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_right1
+  int rows = 4;
+  int columns = 4;
+  matrix_t A = {0};
+  s21_create_matrix(rows, columns, &A);
+  A.matrix[0][0] = 1;
+  A.matrix[0][1] = 1;
+  A.matrix[0][2] = 1;
+  A.matrix[0][3] = 5;
+  A.matrix[1][0] = 6;
+  A.matrix[1][1] = 7;
+  A.matrix[1][2] = 8;
+  A.matrix[1][3] = 6;
+  A.matrix[2][0] = 3;
+  A.matrix[2][1] = 2;
+  A.matrix[2][2] = 3;
+  A.matrix[2][3] = 3;
+  A.matrix[3][0] = 0;
+  A.matrix[3][1] = 2;
+  A.matrix[3][2] = 0;
+  A.matrix[3][3] = 2;
+  double det = -44;
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(0, ret);
+  ck_assert_double_eq(res, det);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_wrong_number1
+  int rows = rand() % 10 + 1;
+  matrix_t A = {0};
+  s21_create_matrix(rows, rows, &A);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < rows; j++) {
+      A.matrix[i][j] = 4;
+    }
+  }
+  double det = 5;
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(0, ret);
+  ck_assert_double_ne(res, det);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_wrong_rc1
+  int rows = rand() % 100 + 1;
+  matrix_t A = {0};
+  s21_create_matrix(rows, rows + 1, &A);
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(2, ret);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_null1
+  int rows = rand() % 100 + 1;
+  matrix_t A = {0};
+  s21_create_matrix(rows, 0, &A);
+  double res = 0;
+  int ret = s21_determinant(&A, &res);
+  ck_assert_int_eq(1, ret);
+  s21_remove_matrix(&A);
+
+#test s21_determinant_matrix_null2
+  matrix_t matrix;
+  s21_create_matrix(3, 3, &matrix);
+  int count = 1;
+  for (int i = 0; i < matrix.rows; i++) {
+    for (int j = 0; j < matrix.columns; j++) {
+      matrix.matrix[i][j] = count++;
+    }
+  }
+  matrix.matrix[2][2] = 10;
+  double res;
+  int ret = s21_determinant(&matrix, &res);
+  ck_assert_uint_eq(res, -3);
+  ck_assert_int_eq(ret, 0);
+  s21_remove_matrix(&matrix);
