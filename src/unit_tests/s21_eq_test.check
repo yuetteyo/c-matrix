@@ -1,0 +1,13 @@
+#suite s21_eq_matrix
+
+#test s21_eq_matrix1
+  int rows = 0;
+  int columns = rand() % 100 + 1;
+  matrix_t M = {0};
+  matrix_t N = {0};
+  s21_create_matrix(rows, columns, &M);
+  s21_create_matrix(rows, columns, &N);
+  int ret = s21_eq_matrix(&M, &N);
+  ck_assert_int_eq(FAILURE, ret);
+  s21_remove_matrix(&M);
+  s21_remove_matrix(&N);

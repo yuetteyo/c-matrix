@@ -1,0 +1,94 @@
+#suite s21_sub_matrix
+
+#test s21_sub_matrix1
+  int rows = rand() % 100 + 1;
+  int columns = rand() % 100 + 1;
+  matrix_t A = {0};
+  matrix_t B = {0};
+  matrix_t R = {0};
+  matrix_t C = {0};
+  s21_create_matrix(rows, columns, &A);
+  s21_create_matrix(rows, columns, &B);
+  s21_create_matrix(rows, columns, &C);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < columns; j++) {
+      double t = rand();
+      A.matrix[i][j] = t / 3;
+      B.matrix[i][j] = t / 5;
+      C.matrix[i][j] = A.matrix[i][j] - B.matrix[i][j];
+    }
+  }
+  int ret = s21_sub_matrix(&A, &B, &R);
+  int res = s21_eq_matrix(&C, &R);
+  ck_assert_int_eq(0, ret);
+  ck_assert_int_eq(SUCCESS, res);
+  s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
+  s21_remove_matrix(&R);
+  s21_remove_matrix(&C);
+
+#test s21_sub_matrix2
+  int rows = rand() % 100 + 1;
+  int columns = rand() % 100 + 1;
+  matrix_t A = {0};
+  matrix_t B = {0};
+  matrix_t R = {0};
+  matrix_t C = {0};
+  s21_create_matrix(rows, columns, &A);
+  s21_create_matrix(rows, columns, &B);
+  s21_create_matrix(rows, columns, &C);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < columns; j++) {
+      double t = rand();
+      A.matrix[i][j] = t / 3;
+      B.matrix[i][j] = t / 5;
+      C.matrix[i][j] = A.matrix[i][j] - B.matrix[i][j] + 1;
+    }
+  }
+  int ret = s21_sub_matrix(&A, &B, &R);
+  int res = s21_eq_matrix(&C, &R);
+  ck_assert_int_eq(0, ret);
+  ck_assert_int_eq(FAILURE, res);
+  s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
+  s21_remove_matrix(&R);
+  s21_remove_matrix(&C);
+
+#test s21_sub_matrix3
+  int rows = rand() % 100 + 1;
+  int columns = rand() % 100 + 1;
+  matrix_t A = {0};
+  matrix_t B = {0};
+  matrix_t R = {0};
+  s21_create_matrix(rows, columns, &A);
+  s21_create_matrix(rows + 1, columns, &B);
+  int ret = s21_sub_matrix(&A, &B, &R);
+  ck_assert_int_eq(2, ret);
+  s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
+
+#test s21_sub_matrix4
+  int rows = rand() % 100 + 1;
+  int columns = rand() % 100 + 1;
+  matrix_t A = {0};
+  matrix_t B = {0};
+  matrix_t R = {0};
+  s21_create_matrix(rows, columns + 1, &A);
+  s21_create_matrix(rows, columns, &B);
+  int ret = s21_sub_matrix(&A, &B, &R);
+  ck_assert_int_eq(2, ret);
+  s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
+
+#test s21_sub_matrix5
+  int rows = 0;
+  int columns = rand() % 100 + 1;
+  matrix_t A = {0};
+  matrix_t B = {0};
+  matrix_t R = {0};
+  s21_create_matrix(rows, columns, &A);
+  s21_create_matrix(rows, columns, &B);
+  int ret = s21_sub_matrix(&A, &B, &R);
+  ck_assert_int_eq(1, ret);
+  s21_remove_matrix(&A);
+  s21_remove_matrix(&B);
